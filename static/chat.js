@@ -154,7 +154,7 @@
     if (code !== S.chat) return false;
     if (!r.ok || !r.data || !r.data.info) {
       if (force || r.status === 403 || r.status === 404) {
-        toast((r.data && r.data.error) || 'Can't open chat !!');
+        toast((r.data && r.data.error) || "Can't open chat !!");
         closeChat();
       }
       return false;

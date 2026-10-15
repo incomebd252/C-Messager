@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Welcome · C-Messager{% endblock %}
+{% block content %}
+<main class="auth">
+  <div class="panel">
+    <div class="brand"><div class="logo">C</div><h1>Welcome, {{ name }}!</h1></div>
+    <p class="sub">Your account has been created. Your ID No:</p>
+    <div class="idbox"><b>{{ code }}</b></div>
+    <p class="note">Share this ID with friends. They can find you and send messages using this ID. You will need this ID and your password to log in, so write it down.</p>
+    <a href="{{ url_for('chat') }}" class="btn full">Start Chatting</a>
+  </div>
+</main>
+{% endblock %}

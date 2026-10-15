@@ -111,6 +111,9 @@ excel_lock = threading.Lock()
 
 
 # ---------------------------------------------------------------- database
+@app.route('/google2a93afe8c228e5ef.html')
+def google_verification():
+    return app.send_static_file('google2a93afe8c228e5ef.html')
 @contextmanager
 def db():
     conn = sqlite3.connect(DB_PATH, timeout=15)

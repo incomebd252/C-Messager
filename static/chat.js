@@ -314,7 +314,7 @@
     box.textContent = '';
     box.hidden = false;
     if (!r.ok || !r.data || !r.data.length) {
-      box.appendChild(el('div', 'empty', 'Can't find anyone.'));
+      box.appendChild(el('div', 'empty', "Can't find anyone."));
       return;
     }
     r.data.forEach((u) => {
@@ -381,7 +381,7 @@
         x.onclick = async () => {
           if (!confirm(m.name + ' - Want to remove from group?')) return;
           const r = await post('/api/groups/' + encodeURIComponent(S.chat) + '/remove', { code: m.code });
-          if (!r.ok) { $('infoErr').textContent = (r.data && r.data.error) || 'Can't remove.'; return; }
+          if (!r.ok) { $('infoErr').textContent = (r.data && r.data.error) || "Can't remove."; return; }
           await loadMessages(true);
           renderInfo();
         };
@@ -399,7 +399,7 @@
     const code = $('addCode').value.trim();
     if (!code) return;
     const r = await post('/api/groups/' + encodeURIComponent(S.chat) + '/add', { code });
-    if (!r.ok) { $('infoErr').textContent = (r.data && r.data.error) || 'Can't add.'; return; }
+    if (!r.ok) { $('infoErr').textContent = (r.data && r.data.error) || "Can't add."; return; }
     $('addCode').value = '';
     await loadMessages(true);
     renderInfo();
@@ -407,7 +407,7 @@
   $('leaveBtn').onclick = async () => {
     if (!confirm('Apni ki sotti group ti chharte chan?')) return;
     const r = await post('/api/groups/' + encodeURIComponent(S.chat) + '/leave');
-    if (!r.ok) { $('infoErr').textContent = (r.data && r.data.error) || 'Can't leave.'; return; }
+    if (!r.ok) { $('infoErr').textContent = (r.data && r.data.error) || "Can't leave."; return; }
     $('infoDlg').close();
     closeChat();
   };

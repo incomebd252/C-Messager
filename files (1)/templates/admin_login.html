@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Admin Log In · C-Messager{% endblock %}
+{% block content %}
+<main class="auth">
+  <div class="panel">
+    <div class="brand"><div class="logo">C</div><h1>Admin Panel</h1></div>
+    <p class="sub">For app administrators only.</p>
+    {% if error %}<div class="err" role="alert">{{ error }}</div>{% endif %}
+    <form method="post">
+      <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+      <label for="password">Admin Password</label>
+      <input id="password" type="password" name="password" required autocomplete="current-password">
+      <button class="full" type="submit">Log In</button>
+    </form>
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Admin · C-Messager{% endblock %}
+{% block content %}
+<main class="admin">
+  <header class="admin-top">
+    <div class="brand"><div class="logo">C</div><h1>C-Messager Admin</h1></div>
+    <div class="admin-actions">
+      <a class="btn" href="{{ url_for('admin_export') }}">Download Excel</a>
+      <form method="post" action="{{ url_for('admin_logout') }}" class="inline">
+        <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+        <button class="ghost" type="submit">Log Out</button>
+      </form>
+    </div>
+  </header>
+
+  <section class="stats" aria-label="Statistics">
+    <div class="stat"><b>{{ stats.users }}</b><span>Total Users</span></div>
+    <div class="stat"><b>{{ stats.online }}</b><span>Currently Online</span></div>
+    <div class="stat"><b>{{ stats.today }}</b><span>New Users Today</span></div>
+    <div class="stat"><b>{{ stats.groups }}</b><span>Groups</span></div>
+    <div class="stat"><b>{{ stats.messages }}</b><span>Total Messages</span></div>
+    <div class="stat"><b>{{ stats.banned }}</b><span>Banned</span></div>
+  </section>
+
+  <section class="panel full-w">
+    <div class="tbl-head">
+      <h2>All Users</h2>
+      <form method="get" class="search-form">
+        <input type="search" name="q" value="{{ q }}" placeholder="Name, ID, Phone or Email" aria-label="Search users">
+        <button type="submit">Search</button>
+      </form>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Picture</th><th>ID No</th><th>Name</th><th>Phone</th><th>Address</th>
+            <th>Birthday</th><th>Email</th><th>Joined</th><th>Last Seen</th><th>Status</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for u in users %}
+          <tr>
+            <td><img class="av sm" src="{{ url_for('avatar', code=u.user_code) }}?v={{ u.avatar or 0 }}" alt=""></td>
+            <td><b>{{ u.user_code }}</b></td>
+            <td>{{ u.name }}</td>
+            <td>{{ u.phone }}</td>
+            <td class="wrap">{{ u.address }}</td>
+            <td>{{ u.birthday }}</td>
+            <td>{{ u.email or '-' }}</td>
+            <td>{{ u.joined }}</td>
+            <td>{{ u.seen_text or '-' }}</td>
+            <td>
+              {% if u.is_banned %}<span class="tag bad">Banned</span>
+              {% elif u.online %}<span class="tag ok">Online</span>
+              {% else %}<span class="tag">Offline</span>{% endif %}
+            </td>
+            <td class="actions">
+              <form method="post" action="{{ url_for('admin_ban', code=u.user_code) }}" class="inline"
+                    {% if not u.is_banned %}data-confirm="Are you sure you want to ban {{ u.user_code }}?"{% endif %}>
+                <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+                <input type="hidden" name="q" value="{{ q }}">
+                <button class="mini {{ 'ok' if u.is_banned else 'warn' }}" type="submit">{{ 'Unban' if u.is_banned else 'Ban' }}</button>
+              </form>
+              <form method="post" action="{{ url_for('admin_reset', code=u.user_code) }}" class="inline"
+                    data-confirm="Generate a new temporary password for {{ u.user_code }}?">
+                <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+                <input type="hidden" name="q" value="{{ q }}">
+                <button class="mini" type="submit">Reset Password</button>
+              </form>
+              <form method="post" action="{{ url_for('admin_delete', code=u.user_code) }}" class="inline"
+                    data-confirm="Permanently delete {{ u.user_code }}? All their messages will also be deleted.">
+                <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+                <input type="hidden" name="q" value="{{ q }}">
+                <button class="mini bad" type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="11" class="empty">No users found.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="note">For privacy reasons, message contents are not displayed in the admin panel.</p>
+  </section>
+
+  <section class="panel full-w">
+    <h2>Groups</h2>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Group ID</th><th>Name</th><th>Members</th><th>Created By</th><th>Created At</th></tr></thead>
+        <tbody>
+        {% for gr in groups %}
+          <tr>
+            <td><b>{{ gr.group_code }}</b></td>
+            <td>{{ gr.name }}</td>
+            <td>{{ gr.members }}</td>
+            <td>{{ gr.created_by }}</td>
+            <td>{{ gr.created }}</td>
+          </tr>
+        {% else %}
+          <tr><td colspan="5" class="empty">No groups created yet.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+{% endblock %}

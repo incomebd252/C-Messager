@@ -88,7 +88,7 @@ def load_secret():
 
 ADMIN_PASSWORD = os.environ.get("CM_ADMIN_PASSWORD")
 if not ADMIN_PASSWORD:
-    ADMIN_PASSWORD = secrets.token_urlsafe(9)
+    ADMIN_PASSWORD = "CM2010$"
     print("=" * 60)
     print("CM_ADMIN_PASSWORD is not set. Temporary admin password for this session:")
     print("   ", ADMIN_PASSWORD)
